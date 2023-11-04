@@ -22,6 +22,17 @@ class VariablePartition:
                 return True
         return False
     
+    def deallocate_memory(self, process_id):
+        if process_id in self.memory_map:
+            # Retrieve the start address and size of the allocated memory for the process
+            start_address, size = self.memory_map[process_id]
+            # Add the partition back to the list with its original size
+            self.partitions.append((start_address, size))
+            # Remove the process from the memory map
+            del self.memory_map[process_id]
+            return True
+        return False
+    
     def display_memory_map(self):
         print("Memory Map:")
         if not self.memory_map:
