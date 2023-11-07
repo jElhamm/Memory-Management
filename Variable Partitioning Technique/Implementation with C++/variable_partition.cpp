@@ -29,6 +29,18 @@ bool VariablePartition::allocate_memory(int process_id, int memory_required) {
     return false;
 }
 
+bool VariablePartition::deallocate_memory(int process_id) {
+    if (memory_map.count(process_id) > 0) {
+        int start_address = memory_map[process_id].first;
+        int size = memory_map[process_id].second;
+        // Add the partition back to the list with its original size
+        partitions.push_back(std::make_pair(start_address, size));
+        // Remove the process from the memory map
+        memory_map.erase(process_id);
+        return true;
+    }
+    return false;
+}
 
 void VariablePartition::display_memory_map() {
     std::cout << "Memory Map:" << std::endl;
