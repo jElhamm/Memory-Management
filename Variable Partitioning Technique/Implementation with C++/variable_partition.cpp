@@ -14,6 +14,21 @@ void VariablePartition::add_partition(int start_address, int size) {
     partitions.push_back(std::make_pair(start_address, size));
 }
 
+bool VariablePartition::allocate_memory(int process_id, int memory_required) {
+    for (int i = 0; i < partitions.size(); i++) {
+        int start_address = partitions[i].first;
+        int size = partitions[i].second;
+        if (size >= memory_required) {
+            // Allocate memory for the process
+            memory_map[process_id] = std::make_pair(start_address, memory_required);
+            // Update the partition with the remaining memory
+            partitions[i] = std::make_pair(start_address + memory_required, size - memory_required);
+            return true;
+        }
+    }
+    return false;
+}
+
 
 void VariablePartition::display_memory_map() {
     std::cout << "Memory Map:" << std::endl;
