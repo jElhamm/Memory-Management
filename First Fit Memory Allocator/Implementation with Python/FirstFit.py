@@ -40,3 +40,49 @@ class MemoryAllocator:
         print(f"Total External Fragmentation: {self.external_fragmentation}")
         print("**************************************************************\n")
  
+
+
+# Display Output
+
+def banner():
+    print("""
+          
+************************************************************************************************************************
+*            This program demonstrates a Memory Allocator using the First Fit allocation strategy.                     *
+*         It allows the user to input the sizes of processes and memory blocks and performs allocation                 *
+*       based on the First Fit algorithm. The allocation results, including the assigned block numbers and             *
+*                           the fragmentation details, are displayed at the end.                                       *
+*                                                                                                                      *
+*                   Usage:                                                                                             *
+*                         1. Enter the number of processes.                                                            *
+*                         2. Enter the size of each process.                                                           *
+*                         3. Enter the number of memory blocks.                                                        *
+*                         4. Enter the size of each memory block.                                                      *
+*                         5. The program will allocate the processes using the First Fit algorithm.                    *
+*                         6. The allocation results and fragmentation details will be displayed.                       *
+*                                                                                                                      *
+************************************************************************************************************************
+    """)
+
+def main():
+    banner()
+    num_processes = int(input("---> Enter the number of processes: "))
+    processes = []
+    for i in range(num_processes):
+        process_size = int(input(f"---> Enter the size of process {i + 1}: "))
+        processes.append(process_size)
+
+    print("**************************************************************")
+    num_blocks = int(input("---> Enter the number of memory blocks: "))
+    blocks = []
+    for i in range(num_blocks):
+        block_size = int(input(f"---> Enter the size of memory block {i + 1}: "))
+        blocks.append(block_size)
+
+    allocator = MemoryAllocator(processes, blocks)
+    allocator.first_fit()
+    allocator.display_allocation()
+
+
+if __name__ == "__main__":
+    main()
