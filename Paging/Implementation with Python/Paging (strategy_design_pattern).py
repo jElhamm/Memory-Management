@@ -105,3 +105,44 @@ class MFUReplacementStrategy(ReplacementStrategy):
         return frame_table.index(most_frequently_used_page)
 #***********************************************************************************************
  
+ 
+# Display Output
+
+def banner():
+    print("""
+          
+********************************************************************************************************************************************
+*                                                 (:          Welcome          :)                                                          *
+*                    It implements a memory manager that simulates page allocation and page replacement algorithms.                        *
+*                It uses a page table and a frame table to keep track of pages and their corresponding frames in memory.                   *
+*  Available page replacement algorithms are FIFO (first in first out), LFU (least used), LRU (least recently used) and MFU (most used).   *
+********************************************************************************************************************************************
+    """)
+
+def main():
+    num_pages = int(input("---> Enter the number of pages: "))
+    num_frames = int(input("---> Enter the number of frames: "))
+    algorithm_choice = input("---> Enter the page replacement algorithm (FIFO, LFU, LRU, MFU): ")
+    replacement_strategy = None
+    if algorithm_choice == "FIFO":
+        replacement_strategy = FIFOReplacementStrategy()
+    elif algorithm_choice == "LFU":
+        replacement_strategy = LFUReplacementStrategy()
+    elif algorithm_choice == "LRU":
+        replacement_strategy = LRUReplacementStrategy()
+    elif algorithm_choice == "MFU":
+        replacement_strategy = MFUReplacementStrategy()
+    else:
+        print("(   ! Invalid page replacement algorithm. !   )")
+        return
+    manager = MemoryManager(num_pages, num_frames, replacement_strategy)
+    while True:
+        page_number = int(input("---> Enter the page number to allocate (or -1 to quit): "))
+        if page_number == -1:
+            break
+        manager.allocate_memory(page_number)
+        manager.print_memory_status()
+
+
+if __name__ == "__main__":
+    main()
