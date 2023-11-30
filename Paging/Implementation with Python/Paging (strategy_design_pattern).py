@@ -54,3 +54,54 @@ class MemoryManager:
             else:
                 print("     Empty")
  
+#***********************************************************************************************
+class ReplacementStrategy:
+    def choose_frame(self, frame_table):
+        raise NotImplementedError()
+
+    def select_frame_to_replace(self, frame_table):
+        raise NotImplementedError()
+
+class FIFOReplacementStrategy(ReplacementStrategy):
+    def choose_frame(self, frame_table):
+        for i, frame in enumerate(frame_table):
+            if frame is None:
+                return i
+        return None
+
+    def select_frame_to_replace(self, frame_table):
+        return 0
+
+class LFUReplacementStrategy(ReplacementStrategy):
+    def choose_frame(self, frame_table):
+        for i, frame in enumerate(frame_table):
+            if frame is None:
+                return i
+        return None
+
+    def select_frame_to_replace(self, frame_table):
+        least_frequently_used_page = min(frame_table, key=lambda x: frame_table.count(x))
+        return frame_table.index(least_frequently_used_page)
+
+class LRUReplacementStrategy(ReplacementStrategy):
+    def choose_frame(self, frame_table):
+        for i, frame in enumerate(frame_table):
+            if frame is None:
+                return i
+        return None
+
+    def select_frame_to_replace(self, frame_table):
+        return 0
+
+class MFUReplacementStrategy(ReplacementStrategy):
+    def choose_frame(self, frame_table):
+        for i, frame in enumerate(frame_table):
+            if frame is None:
+                return i
+        return None
+
+    def select_frame_to_replace(self, frame_table):
+        most_frequently_used_page = max(frame_table, key=lambda x: frame_table.count(x))
+        return frame_table.index(most_frequently_used_page)
+#***********************************************************************************************
+ 
