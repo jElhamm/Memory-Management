@@ -31,3 +31,49 @@ class MemoryManager:
         print(f"No free frames available. Performing page replacement.")
         self.perform_page_replacement(page_number)
  
+    def performPageReplacement(self, page_number):
+        if self.algorithm == "FIFO":
+            self.perform_FIFO_pageReplacement(page_number)
+        elif self.algorithm == "LFU":
+            self.perform_LFU_pageReplacement(page_number)
+        elif self.algorithm == "LRU":
+            self.perform_LRU_pageReplacement(page_number)
+        elif self.algorithm == "MFU":
+            self.perform_MFU_pageReplacement(page_number)
+        else:
+            print("Invalid page replacement algorithm.")
+
+    # Implementation of 'First-In-First-Out' algorithm
+    def perform_FIFO_pageReplacement(self, page_number):
+        oldest_page = self.frame_table[0]
+        print(f"Replacing page {oldest_page} with page {page_number}.")
+        self.page_table[oldest_page] = None
+        self.page_table[page_number] = PageTableEntry(page_number, 0)
+        self.frame_table[0] = page_number
+
+    # Implementation of 'Least Frequently Used' algorithm   
+    def perform_LFU_pageReplacement(self, page_number):
+        least_frequently_used_page = min(
+            self.frame_table, key=lambda x: self.page_access_count[x]
+        )
+        print(f"Replacing page {least_frequently_used_page} with page {page_number}.")
+        self.page_table[least_frequently_used_page] = None
+        self.page_table[page_number] = PageTableEntry(page_number, 0)
+        self.frame_table[self.frame_table.index(least_frequently_used_page)] = page_number
+
+    # Implementation of 'Least Recently Used' algorithm
+    def perform_LRU_pageReplacement(self, page_number):
+        least_recently_used_page = self.frame_table[0]
+        print(f"Replacing page {least_recently_used_page} with page {page_number}.")
+        self.page_table[least_recently_used_page] = None
+        self.page_table[page_number] = PageTableEntry(page_number, 0)
+        self.frame_table[0] = page_number
+
+    # Implementation of 'Most Frequently Used' algorithm
+    def perform_MFU_pageReplacement(self, page_number):
+        most_frequently_used_page = max(self.frame_table, key=lambda x: self.frame_table.count(x))
+        print(f"Replacing page {most_frequently_used_page} with page {page_number}.")
+        self.page_table[most_frequently_used_page] = None
+        self.page_table[page_number] = PageTableEntry(page_number, 0)
+        self.frame_table[self.frame_table.index(most_frequently_used_page)] = page_number
+ 
