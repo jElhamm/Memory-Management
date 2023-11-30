@@ -29,7 +29,7 @@ class MemoryManager:
                 return
 
         print(f"No free frames available. Performing page replacement.")
-        self.perform_page_replacement(page_number)
+        self.performPageReplacement(page_number)
  
     def performPageReplacement(self, page_number):
         if self.algorithm == "FIFO":
@@ -77,3 +77,65 @@ class MemoryManager:
         self.page_table[page_number] = PageTableEntry(page_number, 0)
         self.frame_table[self.frame_table.index(most_frequently_used_page)] = page_number
  
+    def print_memoryStatus(self):
+        print("Page Table:")
+        for entry in self.page_table:
+            if entry is not None:
+                print(f"Page {entry.page_number} => Frame {entry.frame_number}")
+            else:
+                print("Empty")
+
+        print("Frame Table:")
+        for frame in self.frame_table:
+            if frame is not None:
+                print(f"Frame {frame}")
+            else:
+                print("Empty")
+ 
+    def print_memoryStatus(self):
+        print("*****************************************************************")
+        print(" *** Page Table:")
+        for entry in self.page_table:
+            if entry is not None:
+                print(f"     Page {entry.page_number} => Frame {entry.frame_number}")
+            else:
+                print("     Empty")
+
+        print("\n *** Frame Table:")
+        for frame in self.frame_table:
+            if frame is not None:
+                print(f"     Frame {frame}")
+            else:
+                print("     Empty")
+
+
+# Display Output
+
+def banner():
+    print("""
+          
+********************************************************************************************************************************************
+*                                                 (:          Welcome          :)                                                          *
+*                    It implements a memory manager that simulates page allocation and page replacement algorithms.                        *
+*                It uses a page table and a frame table to keep track of pages and their corresponding frames in memory.                   *
+*  Available page replacement algorithms are FIFO (first in first out), LFU (least used), LRU (least recently used) and MFU (most used).   *
+********************************************************************************************************************************************
+    """)
+
+def main():
+    banner()
+    num_pages = int(input("---> Enter the number of pages: "))
+    num_frames = int(input("---> Enter the number of frames: "))
+    manager = MemoryManager(num_pages, num_frames)
+    algorithm_choice = input("---> Enter the page replacement algorithm (FIFO, LFU, LRU, MFU): ")
+    manager.set_page_replacement_algorithm(algorithm_choice)
+    while True:
+        page_number = int(input("Enter the page number to allocate (or -1 to quit): "))
+        if page_number == -1:
+            break
+        manager.allocate_memory(page_number)
+        manager.print_memoryStatus()
+
+
+if __name__ == "__main__":
+    main()
