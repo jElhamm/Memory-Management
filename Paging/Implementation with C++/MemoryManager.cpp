@@ -49,3 +49,51 @@ void MemoryManager::print_memoryStatus() {
 }
 
 //********************************************************************************************
+void MemoryManager::performPageReplacement(int page_number) {
+    if (algorithm == "FIFO") {
+        perform_FIFO_pageReplacement(page_number);
+    } else if (algorithm == "LFU") {
+        perform_LFU_pageReplacement(page_number);
+    } else if (algorithm == "LRU") {
+        perform_LRU_pageReplacement(page_number);
+    } else if (algorithm == "MFU") {
+        perform_MFU_pageReplacement(page_number);
+    } else {
+        std::cout << "Invalid page replacement algorithm." << std::endl;
+    }
+}
+void MemoryManager::perform_FIFO_pageReplacement(int page_number) {
+    int oldest_page = frame_table[0];
+    std::cout << "Replacing page " << oldest_page << " with page " << page_number << "." << std::endl;
+    page_table[oldest_page] = nullptr;
+    page_table[page_number] = new PageTableEntry(page_number, 0);
+    frame_table[0] = page_number;
+}
+void MemoryManager::perform_LFU_pageReplacement(int page_number) {
+    int least_frequently_used_page = *std::min_element(frame_table.begin(), frame_table.end(),
+        [&](int a, int b) {
+            return std::count(frame_table.begin(), frame_table.end(), a) < std::count(frame_table.begin(), frame_table.end(), b);
+        });
+    std::cout << "Replacing page " << least_frequently_used_page << " with page " << page_number << "." << std::endl;
+    page_table[least_frequently_used_page] = nullptr;
+    page_table[page_number] = new PageTableEntry(page_number, 0);
+    std::replace(frame_table.begin(), frame_table.end(), least_frequently_used_page, page_number);
+}
+void MemoryManager::perform_LRU_pageReplacement(int page_number) {
+    int least_recently_used_page = frame_table[0];
+    std::cout << "Replacing page " << least_recently_used_page << " with page " << page_number << "." << std::endl;
+    page_table[least_recently_used_page] = nullptr;
+    page_table[page_number] = new PageTableEntry(page_number, 0);
+    frame_table[0] = page_number;
+}
+void MemoryManager::perform_MFU_pageReplacement(int page_number) {
+    int most_frequently_used_page = *std::max_element(frame_table.begin(), frame_table.end(),
+        [&](int a, int b) {
+            return std::count(frame_table.begin(), frame_table.end(), a) < std::count(frame_table.begin(), frame_table.end(), b);
+        });
+    std::cout << "Replacing page " << most_frequently_used_page << " with page " << page_number << "." << std::endl;
+    page_table[most_frequently_used_page] = nullptr;
+    page_table[page_number] = new PageTableEntry(page_number, 0);
+    std::replace(frame_table.begin(), frame_table.end(), most_frequently_used_page, page_number);
+}
+//********************************************************************************************
